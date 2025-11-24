@@ -1,0 +1,22 @@
+const express = require('express');
+const router = express.Router();
+const Book = require('../models/Book');
+
+// Get all books
+router.get('/', async (req, res) => {
+  const books = await Book.find();
+  res.json(books);
+});
+
+// Add a book
+router.post('/', async (req, res) => {
+  const book = new Book(req.body);
+  try {
+    const savedBook = await book.save();
+    res.status(201).json(savedBook);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+module.exports = router;
